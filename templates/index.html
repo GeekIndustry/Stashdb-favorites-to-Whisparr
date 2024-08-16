@@ -18,6 +18,16 @@
                     <label for="stashdbApiKey">StashDB API Key:</label>
                     <input type="text" id="stashdbApiKey" name="stashdbApiKey" value="{{ config['settings'].get('stashdbApiKey', '') }}" required>
                 </div>
+
+                <div class="label-container">
+                    <label for="stashAppApiKey">StashApp API Key (your local Stash App):</label>
+                    <input type="text" id="stashAppApiKey" name="stashAppApiKey" value="{{ config['settings'].get('stashAppApiKey', '') }}" required>
+                </div>
+
+                <div class="label-container">
+                    <label for="stashAppUrl">StashApp URL:</label>
+                    <input type="text" id="stashAppUrl" name="stashAppUrl" value="{{ config['settings'].get('stashAppUrl', 'http://localhost:9999') }}" required>
+                </div>
     
                 <div class="label-container">
                     <label for="whisparrApiKey">Whisparr API Key:</label>
@@ -94,10 +104,16 @@
             <div class="form-section">
                 <h3>Cron Job Schedule</h3>
                 <div class="label-container">
-                    <label for="cronExpression">Cron Expression:</label>
-                    <input type="text" id="cronExpression" name="cronExpression" value="{{ config['settings'].get('cronExpression', 'e.g., 0 0 * * *') }}" required>
-                    <a href="https://crontab.guru/" target="_blank" class="cron-helper-btn">Need help with cron syntax? Visit crontab.guru</a>
+                    <label for="cronExpressionSyncer">Cron Expression for sync:</label>
+                    <input type="text" id="cronExpressionSyncer" name="cronExpressionSyncer" value="{{ config['settings'].get('cronExpressionSyncer', 'e.g., 0 0 * * *') }}" required>
                 </div>
+
+                <div class="label-container">
+                    <label for="cronExpressionScan">Cron Expression for Stash library scan:</label>
+                    <input type="text" id="cronExpressionScan" name="cronExpressionScan" value="{{ config['settings'].get('cronExpressionScan', 'e.g., 0 0 * * *') }}" required>
+                </div>
+
+                <a href="https://crontab.guru/" target="_blank" class="cron-helper-btn">Need help with cron syntax? Visit crontab.guru</a>
         </div>
     
         <button type="submit">Submit</button>

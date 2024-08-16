@@ -13,12 +13,20 @@ document.getElementById("configForm").addEventListener("submit", function(event)
     studioGenderCheckboxes.forEach(checkbox => selectedStudiosGenders.push(checkbox.value));
 
 
-    // Get the cron expression
-    const cronExpression = document.getElementById("cronExpression").value;
+    // Get the cron expressions
+    const cronExpressionSyncer = document.getElementById("cronExpressionSyncer").value;
+    const cronExpressionScan = document.getElementById("cronExpressionScan").value;
 
-    // Validate the cron expression
-    if (!isCronValid(cronExpression)) {
-        document.getElementById("response").textContent = "Invalid cron expression. Please enter a valid cron expression.";
+    // Validate the sync cron expression
+    if (!isCronValid(cronExpressionSyncer)) {
+        document.getElementById("response").textContent = "Invalid sync cron expression. Please enter a valid cron expression.";
+        document.getElementById("response").style.color = "red";
+        return;
+    }
+
+    // Validate the scan cron expression
+    if (!isCronValid(cronExpressionScan)) {
+        document.getElementById("response").textContent = "Invalid scan cron expression. Please enter a valid cron expression.";
         document.getElementById("response").style.color = "red";
         return;
     }
@@ -27,11 +35,14 @@ document.getElementById("configForm").addEventListener("submit", function(event)
     const formData = {
         settings: {
             stashdbApiKey: document.getElementById("stashdbApiKey").value,
+            stashAppApiKey: document.getElementById("stashAppApiKey").value,
+            stashAppUrl: document.getElementById("stashAppUrl").value,
             whisparrApiKey: document.getElementById("whisparrApiKey").value,
             whisparrUrl: document.getElementById("whisparrUrl").value,
             rootFolderPath: document.getElementById("rootFolderPath").value,
             tagsToAdd: document.getElementById("tagsToAdd").value.split(',').map(tag => tag.trim()),
-            cronExpression: cronExpression
+            cronExpressionSyncer: cronExpressionSyncer,
+            cronExpressionScan: cronExpressionScan
         },
 
         performers: {
@@ -58,7 +69,7 @@ document.getElementById("configForm").addEventListener("submit", function(event)
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById("response").textContent = "Settings saved. Cron job scheduled.";
+        document.getElementById("response").textContent = "Settings saved. Cron jobs scheduled.";
         document.getElementById("response").style.color = "green";
     })
     .catch(error => {

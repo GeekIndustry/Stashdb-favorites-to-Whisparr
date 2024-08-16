@@ -1,7 +1,7 @@
 import requests
 
 
-# Requête GraphQL pour obtenir les acteurs favoris
+# GraphQL query to get favorite actors
 query_actors = """
 query {
   queryPerformers(input: {is_favorite: true}) {
@@ -13,6 +13,7 @@ query {
 }
 """
 
+# GraphQL query to get favorite studios
 query_studios = """
 query {
   queryStudios(input: {is_favorite: true}) {
@@ -24,7 +25,33 @@ query {
 }
 """
 
-# Requête GraphQL pour obtenir les scènes d'un acteur
+# GraphQL mutation to perform a library scan
+mutation_library_scan = """
+mutation metadataScan($input: ScanMetadataInput!) {
+    metadataScan(input: $input)
+}
+"""
+
+# GraphQL query to get defaults library scan settings
+query_defaults_scan_settings = """
+query {
+    configuration {
+        defaults {
+            scan {
+                scanGenerateCovers
+                scanGeneratePreviews
+                scanGenerateImagePreviews
+                scanGenerateSprites
+                scanGeneratePhashes
+                scanGenerateThumbnails
+                scanGenerateClipPreviews
+            }
+        }
+    }
+}
+"""
+
+# # GraphQL query to get scenes of favorite studios or actors
 def query_scenes(type, id):
     if type == "parentStudio":
         input_structure = f'{type}: "{id}"'
@@ -69,22 +96,27 @@ def query_scenes(type, id):
 
 
 
-# Fonction pour effectuer une requête GraphQL
-def graphql_query(stashdb_url, stashdb_api_key, query):
+# Function to perform a GraphQL request
+def graphql_query(url, api_key, query, variables=None):
     headers = {
-        "ApiKey": stashdb_api_key, 
+        "ApiKey": api_key, 
         "Content-Type": "application/json"
     }
+    payload = {
+        "query": query,
+        "variables": variables
+    }
     response = requests.post(
-        stashdb_url,
-        json={'query': query},
+        url,
+        json=payload,
         headers=headers
     )
     if response.status_code == 200:
         return response.json()
     else:
-        print(f"Erreur lors de la requête GraphQL : {response.status_code} - {response.content}")
+        print(f"Error performing GraphQL request: {response.status_code} - {response.content}")
         return None
+
 
 # Ajouter les scènes à Whisparr
 def add_scenes_to_whisparr(tagsToAdd, rootFolderPath, whisparr_api_key, whisparr_url, scenes):
