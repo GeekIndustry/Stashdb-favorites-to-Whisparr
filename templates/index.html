@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Scene Management</title>
+</head>
+<body>
+    <h1>Scene Management Configuration</h1>
+
+    <form id="configForm">
+        <div class="form-container">
+            <!-- Settings Section -->
+            <div class="form-section">
+                <h3>Settings</h3>
+                <div class="label-container">
+                    <label for="stashdbApiKey">StashDB API Key:</label>
+                    <input type="text" id="stashdbApiKey" name="stashdbApiKey" value="{{ config['settings'].get('stashdbApiKey', '') }}" required>
+                </div>
+    
+                <div class="label-container">
+                    <label for="whisparrApiKey">Whisparr API Key:</label>
+                    <input type="text" id="whisparrApiKey" name="whisparrApiKey" value="{{ config['settings'].get('whisparrApiKey', '') }}" required>
+                </div>
+    
+                <div class="label-container">
+                    <label for="whisparrUrl">Whisparr URL:</label>
+                    <input type="text" id="whisparrUrl" name="whisparrUrl" value="{{ config['settings'].get('whisparrUrl', 'http://localhost:6969') }}" required>
+                </div>
+    
+                <div class="label-container">
+                    <label for="rootFolderPath">Root Folder Path:</label>
+                    <input type="text" id="rootFolderPath" name="rootFolderPath" value="{{ config['settings'].get('rootFolderPath', 'path/to/root/folder') }}" required>
+                </div>
+    
+                <div class="label-container">
+                    <label for="tagsToAdd">Tags to add (comma separated):</label>
+                    <input type="text" id="tagsToAdd" name="tagsToAdd" value="{{ ', '.join(config['settings'].get('tagsToAdd', [])) }}">
+                </div>
+            </div>
+    
+            <!-- Filter Criteria for Performers Section -->
+            <div class="form-section">
+                <h3>Filter Criteria for Performers</h3>
+                {% for gender, label in [('MALE', 'Exclude Males'), ('FEMALE', 'Exclude Females'), ('INTERSEX', 'Exclude Intersexs'), ('NON-BINARY', 'Exclude Non-Binaries'), ('TRANSFEMALE', 'Exclude Transfemales'), ('TRANSMALE', 'Exclude Transmales'), ('OTHER', 'Exclude Other')] %}
+                    <div class="label-container">
+                        <input type="checkbox" id="exclude{{ gender }}" name="excludePerformerGender" value="{{ gender }}" {% if gender in config['performers'].get('excludeGender', []) %}checked{% endif %}> 
+                        <label for="exclude{{ gender }}">{{ label }}</label>
+                    </div>
+                {% endfor %}
+                <div class="label-container">
+                    <label for="performerTagsExclude">Tags to exclude (comma separated):</label>
+                    <input type="text" id="performerTagsExclude" name="performerTagsExclude" value="{{ ', '.join(config['performers'].get('tagsExclude', [])) }}" placeholder="tag1, tag2, tag3">
+                </div>
+    
+                <div class="label-container">
+                    <label for="performerTagsInclude">Tags to include (comma separated):</label>
+                    <input type="text" id="performerTagsInclude" name="performerTagsInclude" value="{{ ', '.join(config['performers'].get('tagsInclude', [])) }}" placeholder="tag1, tag2, tag3">
+                </div>
+    
+                <div class="label-container">
+                    <label for="studiosExclude">Studios to exclude (comma separated):</label>
+                    <input type="text" id="studiosExclude" name="studiosExclude" value="{{ ', '.join(config['performers'].get('studiosExclude', [])) }}" placeholder="studio1, studio2, studio3">
+                </div>
+    
+                <div class="label-container">
+                    <label for="studiosInclude">Studios to include (comma separated):</label>
+                    <input type="text" id="studiosInclude" name="studiosInclude" value="{{ ', '.join(config['performers'].get('studiosInclude', [])) }}" placeholder="studio1, studio2, studio3">
+                </div>
+            </div>
+    
+            <!-- Filter Criteria for Studios Section -->
+            <div class="form-section">
+                <h3>Filter Criteria for Studios</h3>
+                {% for gender, label in [('MALE', 'Exclude Males'), ('FEMALE', 'Exclude Females'), ('INTERSEX', 'Exclude Intersexs'), ('NON-BINARY', 'Exclude Non-Binaries'), ('TRANSFEMALE', 'Exclude Transfemales'), ('TRANSMALE', 'Exclude Transmales'), ('OTHER', 'Exclude Other')] %}
+                    <div class="label-container">
+                        <input type="checkbox" id="exclude{{ gender }}" name="excludeStudioGender" value="{{ gender }}" {% if gender in config['studios'].get('excludeGender', []) %}checked{% endif %}> 
+                        <label for="exclude{{ gender }}">{{ label }}</label>
+                    </div>
+                {% endfor %}
+                <div class="label-container">
+                    <label for="studioTagsExclude">Tags to exclude (comma separated):</label>
+                    <input type="text" id="studioTagsExclude" name="studioTagsExclude" value="{{ ', '.join(config['studios'].get('tagsExclude', [])) }}" placeholder="tag1, tag2, tag3">
+                </div>
+    
+                <div class="label-container">
+                    <label for="studioTagsInclude">Tags to include (comma separated):</label>
+                    <input type="text" id="studioTagsInclude" name="studioTagsInclude" value="{{ ', '.join(config['studios'].get('tagsInclude', [])) }}" placeholder="tag1, tag2, tag3">
+                </div>
+            </div>
+    
+            <!-- Cron Job Schedule Section -->
+            <div class="form-section">
+                <h3>Cron Job Schedule</h3>
+                <div class="label-container">
+                    <label for="cronExpression">Cron Expression:</label>
+                    <input type="text" id="cronExpression" name="cronExpression" value="{{ config['settings'].get('cronExpression', 'e.g., 0 0 * * *') }}" required>
+                    <a href="https://crontab.guru/" target="_blank" class="cron-helper-btn">Need help with cron syntax? Visit crontab.guru</a>
+                </div>
+        </div>
+    
+        <button type="submit">Submit</button>
+    </form>
+    
+
+    <p id="response"></p>
+
+    <!-- Link to the JavaScript file in the static folder -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+version: '3'
+services:
+  stashdbsyncer:
+    build: stashdb-syncer:latest
+    environment:
+      - DEBUG=True
+    ports:
+      - "5000:5000"

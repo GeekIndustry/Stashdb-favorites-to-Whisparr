@@ -1,0 +1,112 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h1 {
+    color: #4a4a4a;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-section {
+    width: 100%;
+}
+
+h3 {
+    color: #4a4a4a;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.label-container {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+input[type="text"],
+button {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+input[type="text"]:focus {
+    border-color: #6a89cc;
+    outline: none;
+    box-shadow: 0 0 5px rgba(106, 137, 204, 0.3);
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #6a89cc;
+    color: #fff;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #4a69bd;
+}
+
+#response {
+    margin-top: 20px;
+    text-align: center;
+    color: #4a4a4a;
+}
+
+.cron-helper-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #6a89cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.cron-helper-btn:hover {
+    background-color: #4a69bd;
+}
