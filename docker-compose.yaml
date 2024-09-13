@@ -1,6 +1,7 @@
 version: '3'
 services:
   stashdbsyncer:
+    container_name: stashdb-syncer
     build:
       context: ./
     image: stashdb-syncer:latest  
