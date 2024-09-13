@@ -5,18 +5,12 @@ FROM python:${PYTHON_VERSION}-slim as base
 
 # Set environment variables
 ENV DEBUG=False
-
-# Prevents Python from writing pyc files.
 ENV PYTHONDONTWRITEBYTECODE=1
-
-# Keeps Python from buffering stdout and stderr to avoid situations where
-# the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Create a non-privileged user that the app will run under.
-# See https://docs.docker.com/go/dockerfile-user-best-practices/
+# Create a non-privileged user
 ARG UID=10001
 RUN adduser \
     --disabled-password \
@@ -27,23 +21,25 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
-# Leverage a bind mount to requirements.txt to avoid having to copy them into
-# into this layer.
+# Copy the requirements file into the container and install dependencies
+COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
+
+# Copy the rest of the source code into the container
+COPY . .
+
+# Set ownership of /app to appuser
+RUN chown -R appuser:appuser /app
 
 # Switch to the non-privileged user to run the application.
 USER appuser
 
-# Copy the source code into the container.
-COPY . .
-
-
+# Expose the Flask app's port
 EXPOSE 5000
 
+# Set the default Flask app
 ENV FLASK_APP=app.py
 
+# Command to run the application
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
